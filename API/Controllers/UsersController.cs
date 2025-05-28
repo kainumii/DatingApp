@@ -7,9 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UsersController(DataContext context) : ControllerBase
+    public class UsersController(DataContext context) : BaseApiController
     {
         // GET: api/users
         [HttpGet]
@@ -17,7 +15,7 @@ namespace API.Controllers
         {
             var users = await context.Users.ToListAsync();
             return Ok(users);
-        }      
+        }
 
         // GET: api/users/5
         [HttpGet("{id}")]
@@ -29,34 +27,8 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-                      
+
             return Ok(user);
-        }
-
-        // POST: api/users
-        [HttpPost]
-        public async Task<ActionResult<object>> CreateUser(object userDto)
-        {
-            // Replace with actual user creation logic
-            var user = new object();
-
-            return CreatedAtAction(nameof(GetUser), new { id = 1 }, user);
-        }
-
-        // PUT: api/users/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, object userDto)
-        {
-            // Replace with actual user update logic
-            return NoContent();
-        }
-
-        // DELETE: api/users/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
-        {
-            // Replace with actual user deletion logic
-            return NoContent();
         }
     }
 }
