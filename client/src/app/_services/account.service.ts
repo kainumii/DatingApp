@@ -31,4 +31,18 @@ export class AccountService {
     this.currentUser.set(null);
     localStorage.removeItem('user');
   } 
+
+  register(model: any) {
+    return this.http.post<User>(`${this.baseUrl}/account/register`, model).pipe(
+      map((user: User) => {
+        if(user) {
+          this.currentUser.set(user);
+          localStorage.setItem('user', JSON.stringify(user));   
+        }
+        return user; // Return the user so subscribers can access it
+      })
+    );
+  }
 }
+
+
