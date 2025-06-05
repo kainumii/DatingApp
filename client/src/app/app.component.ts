@@ -1,25 +1,34 @@
 import { NgFor } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NavComponent } from './nav/nav.component';
+import { HomeComponent } from './home/home.component';
+import { AccountService } from './_services/account.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NgFor],
+  imports: [RouterOutlet, NgFor, NavComponent, HomeComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
-export class AppComponent {
-  http = inject(HttpClient);
-  title = 'client';
+export class AppComponent implements OnInit {
 
-  users: any;
+  private accountService = inject(AccountService);
+  
+  ngOnInit(): void {
 
- constructor() {
-    this.http.get('https://localhost:5001/api/users').subscribe({
-      next: response => this.users = response,
-      error: error => console.error('Error fetching users:', error),
-      complete: () => console.log('User fetch complete')    
-    })
+    this.setCurrentUser();
+    // You can also call this.accountService.setCurrentUser() if you want to use that method instead    
   }
+
+  setCurrentUser() {
+    const userString = localStorage.getItem('user');    
+    if (userString) {
+      const user = JSON.parse(userString);  
+      this.accountService.currentUser.set(user);
+      console.log('Current user set:', user);
+    }
+  }
+
+  
 }

@@ -1,0 +1,60 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="#">APPI</a>
+
+    @if (accountService.currentUser()) {
+    <ul class="navbar-nav me-auto mb-2 mb-md-0">
+      <li class="nav-item">
+        <a class="nav-link">Matches</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link">Lists</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link">Messages</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link">Demo</a>
+      </li>
+    </ul>
+    } 
+    
+   @if(accountService.currentUser()) {
+  <div class="dropdown ms-auto" dropdown>
+    <a class="dropdown-toggle text-light text-decoration-none" 
+       dropdownToggle
+       href="#" role="button"
+       aria-expanded="false">
+      Welcome, {{ model.username }}
+    </a>
+    
+    <ul *dropdownMenu class="dropdown-menu dropdown-menu-end">
+      <li><a class="dropdown-item" href="#"><i class="fa fa-user me-2"></i>Edit Profile</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item" href="#" (click)="logout()"><i class="fa fa-sign-out me-2"></i>Logout</a></li>
+    </ul>
+  </div>
+}
+    
+    @if (!accountService.currentUser()) {
+    <form #loginForm="ngForm" (ngSubmit)="login()" class="d-flex">
+      <!-- Using ngForm for form handling, Add FormsModule in app.module.ts -->
+      <input
+        name="userName"
+        [(ngModel)]="model.username"
+        class="form-control me-2"
+        placeholder="Username"
+      />
+      <input
+        name="password"
+        [(ngModel)]="model.password"
+        class="form-control me-2"
+        placeholder="Password"
+        type="password"
+      />
+      >
+      <button class="btn btn-outline-success" type="submit">Login</button>
+    </form>
+    }
+  </div>
+</nav>
