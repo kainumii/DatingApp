@@ -19,29 +19,32 @@ public class AccountController(DataContext context, ITokenService tokenService) 
         // Here you would typically add logic to register a user
         // For now, we will just return a success message
 
-        if(await UserExists(registerDto.Username))
+        if (await UserExists(registerDto.Username))
         {
             return BadRequest("Username is already taken");
         }
 
-        using var hmac = new System.Security.Cryptography.HMACSHA512();
-        var passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(registerDto.Password));
+        // Uncomment the following lines to implement user registration logic
+        return Ok();
 
-        var user = new User
-        {
-            UserName = registerDto.Username,
-            PasswordHash = passwordHash,
-            PasswordSalt = hmac.Key
-        };
+        // using var hmac = new System.Security.Cryptography.HMACSHA512();
+        // var passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(registerDto.Password));
 
-        context.Users.Add(user);
-        await context.SaveChangesAsync();
+        // var user = new User
+        // {
+        //     UserName = registerDto.Username,
+        //     PasswordHash = passwordHash,
+        //     PasswordSalt = hmac.Key
+        // };
 
-        return new UserDto
-        {
-            Username = user.UserName,
-            Token = tokenService.CreateToken(user)
-        };
+        // context.Users.Add(user);
+        // await context.SaveChangesAsync();
+
+        // return new UserDto
+        // {
+        //     Username = user.UserName,
+        //     Token = tokenService.CreateToken(user)
+        // };
     }
 
     [HttpPost("login")] // Route: api/account/login

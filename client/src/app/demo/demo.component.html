@@ -1,1 +1,79 @@
-<p>demo works!</p>
+<div class="weather-container">
+  <!-- Current Weather Section -->
+  <h2>Weather for {{ location }}</h2>
+  
+  <!-- Loading indicator for current weather -->
+  <div *ngIf="isLoading" class="loading-spinner">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  
+  <!-- Error message for current weather -->
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+  
+  <!-- Current Weather data card -->
+  <div *ngIf="weatherData && !isLoading" class="weather-card">
+    <div class="location">
+      <h3>{{ weatherData.location.name }}</h3>
+      <p class="country">{{ weatherData.location.country }}</p>
+    </div>
+    
+    <div class="weather-details">
+      <div class="temperature">
+        <span class="temp-value">{{ weatherData.current.temp_c }}°C</span>
+        <div class="condition">
+          <img *ngIf="weatherData.current.condition?.icon" [src]="'https:' + weatherData.current.condition.icon" alt="Weather icon">
+          <span>{{ weatherData.current.condition?.text }}</span>
+        </div>
+      </div>
+      
+      <div class="update-info">
+        <p>Last updated: {{ weatherData.current.last_updated | date:'medium' }}</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Forecast Section -->
+  <h2 class="mt-4">3-Day Forecast</h2>
+  
+  <!-- Loading indicator for forecast -->
+  <div *ngIf="isForecastLoading" class="loading-spinner">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading forecast...</span>
+    </div>
+  </div>
+  
+  <!-- Error message for forecast -->
+  <div *ngIf="forecastError" class="alert alert-danger">
+    {{ forecastError }}
+  </div>
+  
+  <!-- Forecast data cards -->
+  <div *ngIf="forecastData && !isForecastLoading" class="forecast-container">
+    <div *ngFor="let day of forecastData.forecast.forecastday" class="forecast-card">
+      <div class="forecast-date">
+        {{ day.date | date:'EEE, MMM d' }}
+      </div>
+      <div class="forecast-temp">
+        <span class="max-temp">{{ day.day.maxtemp_c }}°C</span>
+        <span class="min-temp">{{ day.day.mintemp_c }}°C</span>
+      </div>
+      <div class="forecast-condition">
+        <img [src]="'https:' + day.day.condition.icon" alt="Forecast icon">
+        <span>{{ day.day.condition.text }}</span>
+      </div>
+      <div class="forecast-details">
+        <div>Chance of rain: {{ day.day.daily_chance_of_rain }}%</div>
+        <div>Humidity: {{ day.day.avghumidity }}%</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Refresh button -->
+  <button class="btn btn-primary refresh-btn mt-3" (click)="refreshAll()">
+    Refresh Weather Data
+  </button>
+</div>
