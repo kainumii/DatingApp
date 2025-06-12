@@ -11,7 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class RegisterComponent {
   private accountService = inject(AccountService); // Inject the account service to handle registration logic
-  usersFromHomeComponent = input.required<any>(); // Input property to control the visibility of the registration form
+  
   cancelRegiuster = output<boolean>(); // Output event to notify when registration is cancelled
   model: any = {}; // Initialize the model object
   toastr = inject(ToastrService); // Inject ToastrService for displaying notifications

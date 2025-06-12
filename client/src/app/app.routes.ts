@@ -5,11 +5,13 @@ import { MemberDetailComponent } from './members/member-detail/member-detail.com
 import { ListsComponent } from './lists/lists.component';
 import { MessagesComponent } from './messages/messages.component';
 import { DemoComponent } from './demo/demo.component';
+import { MemberEditComponent } from './members/member-edit/member-edit.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'members', component: MemberListComponent },
-  { path: 'members/:id', component: MemberDetailComponent },
+  { path: 'members/:username', component: MemberDetailComponent },
+  { path: 'member/edit', component: MemberEditComponent }, 
   { path: 'lists', component: ListsComponent },
   { path: 'messages', component: MessagesComponent },
   { path: 'demo', component: DemoComponent },

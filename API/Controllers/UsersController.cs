@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Data;
 using API.DTO;
@@ -24,7 +25,7 @@ namespace API.Controllers
             return Ok(usersToReturn);
         }
 
-        // GET: api/users/5
+        // GET: api/users/mike
         [HttpGet("{username}")]
         public async Task<ActionResult<MemberDto>> GetUser(string username)
         {
@@ -58,6 +59,34 @@ namespace API.Controllers
             }
 
             return Ok(user);
+        }
+
+        // PUT: api/users/update
+        [HttpPut]
+        public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
+        {
+            // var user = await userRepo.GetUserByUsernameAsync(User.Identity.Name);
+            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (username == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            var user = await userRepo.GetUserByUsernameAsync(username);
+            if (user == null)
+            {
+                return BadRequest("Could not find user");
+            }
+
+
+            mapper.Map(memberUpdateDto, user);
+
+            if (await userRepo.SaveAllAsync())
+            {
+                return NoContent();
+            }
+
+            return BadRequest("Failed to update user");
         }
     }
 }

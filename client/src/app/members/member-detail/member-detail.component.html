@@ -1,1 +1,34 @@
-<p>member-detail works!</p>
+@if(member) {
+    <div class="row">
+        <div class="col-4">
+            <div class="card">
+                <img class="rounded-circle me-3" src="{{member.photoUrl || './assets/user.png'}}" alt="{{member.knownAs}}" style="width: 30px; height: 30px; object-fit: cover; border: 1px solid white;">
+                <div class="card-body">
+                    <h5 class="card-title">{{member.knownAs}}</h5>
+                    <p class="card-text">{{member.city}}, {{member.country}}</p>
+                    <p class="card-text">Age: {{member.age}}</p>
+                    <p class="card-text">Last Active: {{member.lastActive }}</p>
+                </div>
+                <div class="card-footer d-flex gap-2">
+                    <button class="btn btn-secondary" >Like</button>
+                    <button class="btn btn-primary" >Send Message</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <tabset class="member-tabs">
+                <tab heading="{{member.knownAs}}'s Profile">
+                    <p>{{member.introduction}}</p>
+                    <p>{{member.lookingFor}}</p>                    
+                </tab>
+                <tab heading="Intererssts">
+                    <p>{{member.interests}}</p>
+                    
+                </tab>
+                <tab heading="Photos">
+                    <p>Photos ..</p>
+                </tab>
+            </tabset>
+        </div>
+    </div>
+}
