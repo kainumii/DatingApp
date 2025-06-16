@@ -1,34 +1,123 @@
-<form #registerForm="ngForm" (ngSubmit)="register()" >
-    <div class="container mt-5">
-        <h1>Register</h1>
-        <p class="lead">Create your account to find your match!</p>
-        
-        <div class="mb-3 form-floating">
-            <input
-                type="text"
-                id="username"
-                name="username"
-                [(ngModel)]="model.username"
-                class="form-control" />
-            <label>Username</label>
-            
-        </div> 
+<form [formGroup]="registerForm" (ngSubmit)="register()">
+  <div class="container mt-5">
+    <h1>Register</h1>
+    <p class="lead">Create your account to find your match!</p>
 
-        <div class="mb-3 form-floating">
-            <input
-                type="password"
-                id="password"
-                name="password"
-                [(ngModel)]="model.password"
-                class="form-control" />
-           <label>Password</label>
-            
-        </div> 
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary me-2">Register</button>
-            <button type="button" class="btn btn-outline-secondary" (click)="cancel()">Cancel</button>
-        </div>
+    <div class="mb-3">
+      <label style="margin-right: 10px">Gender: </label>
+      <label class="form-check-label me-3">
+        <input
+          type="radio"
+          formControlName="gender"
+          class="form-check-input"
+          value="male"
+        />
+        Male
+      </label>
+      <label class="form-check-label">
+        <input
+          type="radio"
+          formControlName="gender"
+          class="form-check-input"
+          value="female"
+        />
+        Female
+      </label>
     </div>
 
-   
+    <div class="mb-3 form-floating">
+      <input
+        type="text"
+        id="username"
+        formControlName="username"
+        class="form-control"
+      />      
+      <label>Username</label>      
+    </div>
+    <div class="mb-3 form-floating">
+      <input
+        type="text"
+        id="knownAs"
+        formControlName="knownAs"
+        class="form-control"
+      />
+      <label>Known as</label>
+    </div>
+    <div class="mb-3 form-floating">
+      <input
+        type="text"
+        id="city"
+        formControlName="city"
+        class="form-control"
+      />
+      <label>City</label>
+    </div>
+    <div class="mb-3 form-floating">
+      <input
+        type="text"
+        id="country"
+        formControlName="country"
+        class="form-control"
+      />
+      <label>Country</label>
+    </div>
+    <div class="mb-3 form-floating">
+      <input
+        type="text"
+        id="dateofBirth"
+        formControlName="dateOfBirth"
+        class="form-control"
+        [type]="'date'"
+      />
+      <label>Birthdate</label>
+    </div>
+
+    <div class="mb-3 form-floating">
+      <input
+        type="password"
+        id="password"
+        formControlName="password"
+        class="form-control"
+      />
+      <label>Password</label>
+    </div>
+
+    <div class="mb-3 form-floating">
+      <input
+        type="password"
+        id="confirmPassword"
+        formControlName="confirmPassword"
+        class="form-control"
+      />
+      <label>Confirm Password</label>
+    </div>
+
+    @if (validationErrors) {
+
+    <div class="alert alert-danger text-start">
+      <ul>
+        @for (error of validationErrors; track $index) {
+
+        <li>{{ error }}</li>
+        }
+      </ul>
+    </div>
+    }
+
+    <div class="mb-3">
+      <button type="submit" class="btn btn-primary me-2">Register</button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="cancel()"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
 </form>
+
+<p>{{ registerForm.value | json }}</p>
+<p>{{ registerForm.status }}</p>
+
+<!-- https://angular.dev/guide/forms/reactive-forms -->

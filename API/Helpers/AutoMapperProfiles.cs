@@ -13,6 +13,10 @@ public class AutoMapperProfiles : Profile
         CreateMap<Photo, PhotoDto>();
 
         CreateMap<MemberUpdateDto, User>();
-            
+
+        CreateMap<RegisterDto, User>();
+           
+            CreateMap<string, DateOnly>()
+                .ConvertUsing(dateString => DateOnly.Parse(dateString));
     }
 }

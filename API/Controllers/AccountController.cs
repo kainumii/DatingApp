@@ -7,10 +7,11 @@ using API.Data;
 using API.DTO;
 using API.Interfaces;
 using API.Services;
+using AutoMapper;
 
 namespace API.Controllers;
 
-public class AccountController(DataContext context, ITokenService tokenService) : BaseApiController
+public class AccountController(DataContext context, ITokenService tokenService, IMapper mapper) : BaseApiController
 {
     [HttpPost("register")] // Route: api/account/register
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
@@ -23,28 +24,24 @@ public class AccountController(DataContext context, ITokenService tokenService) 
         {
             return BadRequest("Username is already taken");
         }
+       
 
-        // Uncomment the following lines to implement user registration logic
-        return Ok();
+        using var hmac = new System.Security.Cryptography.HMACSHA512();
 
-        // using var hmac = new System.Security.Cryptography.HMACSHA512();
-        // var passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(registerDto.Password));
+        var user = mapper.Map<User>(registerDto);
+        user.UserName = registerDto.Username.ToLower();
+        user.PasswordSalt = hmac.Key;         
+        user.PasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(registerDto.Password));
 
-        // var user = new User
-        // {
-        //     UserName = registerDto.Username,
-        //     PasswordHash = passwordHash,
-        //     PasswordSalt = hmac.Key
-        // };
+        context.Users.Add(user);
+        await context.SaveChangesAsync();
 
-        // context.Users.Add(user);
-        // await context.SaveChangesAsync();
-
-        // return new UserDto
-        // {
-        //     Username = user.UserName,
-        //     Token = tokenService.CreateToken(user)
-        // };
+        return new UserDto
+        {
+            Username = user.UserName,
+            Token = tokenService.CreateToken(user),
+            KnownAs = user.KnownAs
+        };
     }
 
     [HttpPost("login")] // Route: api/account/login
@@ -69,7 +66,7 @@ public class AccountController(DataContext context, ITokenService tokenService) 
         return new UserDto
         {
             Username = user.UserName,
-            Token = tokenService.CreateToken(user)
+            Token = tokenService.CreateToken(user), KnownAs = user.KnownAs
         };
     }
 
